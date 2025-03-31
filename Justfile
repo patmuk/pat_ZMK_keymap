@@ -1,10 +1,11 @@
+# original: https://github.com/urob/zmk-config/blob/main/Justfile
 default:
     @just --list --unsorted
 
 config := absolute_path('config')
 build := absolute_path('.build')
 out := absolute_path('firmware')
-draw := absolute_path('draw')
+draw := absolute_path('visualisation')
 
 # parse combos.dtsi and adjust settings to not run out of slots
 _parse_combos:
@@ -84,9 +85,9 @@ clean-nix:
 draw:
     #!/usr/bin/env bash
     set -euo pipefail
-    keymap -c "{{ draw }}/config.yaml" parse -z "{{ config }}/base.keymap" --virtual-layers Combos >"{{ draw }}/base.yaml"
-    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/base.yaml"
-    keymap -c "{{ draw }}/config.yaml" draw "{{ draw }}/base.yaml" -k "ferris/sweep" >"{{ draw }}/base.svg"
+    keymap -c "{{ draw }}/draw_config.yaml" parse -z "{{ config }}/splitkb_aurora_sweep.keymap" --virtual-layers Combos >"{{ draw }}/draw.yaml"
+    yq -Yi '.combos.[].l = ["Combos"]' "{{ draw }}/draw.yaml"
+    keymap -c "{{ draw }}/draw_config.yaml" draw "{{ draw }}/draw.yaml" -k "aurora/sweep" >"{{ draw }}/drawn.svg"
 
 # initialize west
 init:
